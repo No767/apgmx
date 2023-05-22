@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+from typing import List
 import json
 import os
 import re
@@ -11,16 +12,20 @@ from pathlib import Path
 import asyncpg
 import click
 
-from .revision import Revision
-from .types import Revisions
-from .constants import REVISION_FILE
+from revision import Revision, Revisions
 
+REVISION_FILE = re.compile(r"(?P<kind>V|U)(?P<version>[0-9]+)__(?P<description>.+).sql")
+    
 class Migrations:
     def __init__(self, *, filename: str = "migrations/revisions.json"):
         self.filename: str = filename
         self.root: Path = Path(filename).parent
         self.revisions: dict[int, Revision] = self.get_revisions()
         self.load()
+        
+    @property
+    def ordered_revisions(self) -> list[Revision]:
+        return sorted(self.revisions.values(), key=lambda r: r.version)
 
     def ensure_path(self) -> None:
         self.root.mkdir(exist_ok=True)
@@ -44,6 +49,9 @@ class Migrations:
                 result[rev.version] = rev
 
         return result
+    
+    def get_all_revisions(self) -> List[Revision]:
+        return sorted(self.revisions.values(), key=lambda r: r.version)
 
     def dump(self) -> Revisions:
         return {
@@ -67,10 +75,6 @@ class Migrations:
 
     def is_next_revision_taken(self) -> bool:
         return self.version + 1 in self.revisions
-
-    @property
-    def ordered_revisions(self) -> list[Revision]:
-        return sorted(self.revisions.values(), key=lambda r: r.version)
 
     def create_revision(self, reason: str, *, kind: str = "V") -> Revision:
         cleaned = re.sub(r"\s", "_", reason)
@@ -100,6 +104,19 @@ class Migrations:
                     sql = revision.file.read_text("utf-8")
                     await connection.execute(sql)
                     successes += 1
+
+        self.version += successes
+        self.save()
+        return successes
+    
+    async def upgrade_all(self, connection: asyncpg.Connection) -> int:
+        ordered = self.ordered_revisions
+        successes = 0
+        async with connection.transaction():
+            for revision in ordered:
+                sql = revision.file.read_text("utf-8")
+                await connection.execute(sql)
+                successes += 1
 
         self.version += successes
         self.save()

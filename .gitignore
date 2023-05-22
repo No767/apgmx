@@ -165,3 +165,6 @@ cython_debug/
 
 # apgmx migration files
 migrations/
+
+# Testing Scripts
+testing-scripts/
