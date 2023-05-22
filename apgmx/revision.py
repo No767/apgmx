@@ -1,6 +1,7 @@
-from pathlib import Path
 import re
+from pathlib import Path
 from typing import TypedDict
+
 
 class Revisions(TypedDict):
     # The version key represents the current activated version
@@ -9,7 +10,8 @@ class Revisions(TypedDict):
     # and have no gaps
     version: int
     database_uri: str
-    
+
+
 class Revision:
     __slots__ = ("kind", "version", "description", "file")
 

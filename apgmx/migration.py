@@ -1,28 +1,27 @@
 from __future__ import annotations
 
 import datetime
-from typing import List
 import json
 import os
 import re
-
 import uuid
 from pathlib import Path
+from typing import List
 
 import asyncpg
 import click
-
 from revision import Revision, Revisions
 
 REVISION_FILE = re.compile(r"(?P<kind>V|U)(?P<version>[0-9]+)__(?P<description>.+).sql")
-    
+
+
 class Migrations:
     def __init__(self, *, filename: str = "migrations/revisions.json"):
         self.filename: str = filename
         self.root: Path = Path(filename).parent
         self.revisions: dict[int, Revision] = self.get_revisions()
         self.load()
-        
+
     @property
     def ordered_revisions(self) -> list[Revision]:
         return sorted(self.revisions.values(), key=lambda r: r.version)
@@ -49,7 +48,7 @@ class Migrations:
                 result[rev.version] = rev
 
         return result
-    
+
     def get_all_revisions(self) -> List[Revision]:
         return sorted(self.revisions.values(), key=lambda r: r.version)
 
@@ -108,7 +107,7 @@ class Migrations:
         self.version += successes
         self.save()
         return successes
-    
+
     async def upgrade_all(self, connection: asyncpg.Connection) -> int:
         ordered = self.ordered_revisions
         successes = 0
