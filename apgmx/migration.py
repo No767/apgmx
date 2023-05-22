@@ -10,7 +10,8 @@ from typing import List
 
 import asyncpg
 import click
-from revision import Revision, Revisions
+
+from .revision import Revision, Revisions
 
 REVISION_FILE = re.compile(r"(?P<kind>V|U)(?P<version>[0-9]+)__(?P<description>.+).sql")
 

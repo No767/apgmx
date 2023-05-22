@@ -3,12 +3,13 @@ import asyncio
 import traceback
 
 import typer
-from db_settings import database_uri
-from migration import Migrations
 
 # from apgmx.upgrade_utils import run_upgrade, run_upgrade_all
 from typing_extensions import Annotated
-from utils import ensure_uri_can_run, run_upgrade, run_upgrade_all
+
+from .db_settings import database_uri
+from .migration import Migrations
+from .utils import ensure_uri_can_run, run_upgrade, run_upgrade_all
 
 app = typer.Typer(
     add_completion=False,

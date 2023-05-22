@@ -1,6 +1,7 @@
 import asyncpg
-from db_settings import database_uri
-from migration import Migrations
+
+from .db_settings import database_uri
+from .migration import Migrations
 
 
 async def run_upgrade(migrations: Migrations) -> int:

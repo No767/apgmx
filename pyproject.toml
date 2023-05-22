@@ -21,6 +21,9 @@ profile = 'black'
 [tool.bandit]
 skips = ["B311", "B101"]
 
+[tool.poetry.scripts]
+apgmx = "apgmx.launcher:app"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
