@@ -58,7 +58,7 @@ def init(
     migrations.database_uri = confLoader.get_database_uri()
     revision = migrations.create_revision(reason)
     typer.echo(f"created revision V{revision.version!r}")
-    typer.secho(f"hint: use the `upgrade` command to apply", fg="yellow")
+    typer.secho("hint: use the `upgrade` command to apply", fg="yellow")
 
 
 @migrateApp.command()

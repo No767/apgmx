@@ -13,12 +13,17 @@ typer = {extras = ["all"], version = "^0.9.0"}
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.2"
+pyright = "^1.1.309"
+ruff = "^0.0.269"
 
 [tool.isort]
 profile = 'black'
 
 [tool.bandit]
 skips = ["B311", "B101"]
+
+[tool.ruff]
+ignore = ["E501"]
 
 [tool.poetry.scripts]
 apgmx = "apgmx.launcher:app"
