@@ -162,9 +162,11 @@ cython_debug/
 # VS Code
 .vscode/
 
-
 # apgmx migration files
 migrations/
 
 # Testing Scripts
 testing-scripts/
+
+# apgmx config file
+apgmx_config.json

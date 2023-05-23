@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import List
 
 import asyncpg
-import click
+import typer
 
 from .revision import Revision, Revisions
 
@@ -127,4 +127,10 @@ class Migrations:
         for revision in ordered:
             if revision.version > self.version:
                 sql = revision.file.read_text("utf-8")
-                click.echo(sql)
+                typer.echo(sql)
+
+    def display_all(self) -> None:
+        ordered = self.ordered_revisions
+        for revision in ordered:
+            sql = revision.file.read_text("utf-8")
+            typer.echo(sql)

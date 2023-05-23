@@ -1,10 +1,7 @@
-# from ..migration import Migrations
 import asyncio
 import traceback
 
 import typer
-
-# from apgmx.upgrade_utils import run_upgrade, run_upgrade_all
 from typing_extensions import Annotated
 
 from .db_settings import database_uri
@@ -58,7 +55,6 @@ def init(
 
     migrations = Migrations()
     migrations.database_uri = database_uri  # type: ignore
-    # migrations.database_uri = ""
     revision = migrations.create_revision(reason)
     typer.echo(f"created revision V{revision.version!r}")
     typer.secho(f"hint: use the `upgrade` command to apply", fg="yellow")
@@ -113,7 +109,7 @@ def all(
     migrations = Migrations()
 
     if sql:
-        migrations.display()
+        migrations.display_all()
         return
 
     try:
