@@ -8,6 +8,13 @@ from .config_loader import ConfigLoader
 from .migration import Migrations
 from .utils import ensure_uri_can_run, run_upgrade, run_upgrade_all
 
+try:
+    import uvloop  # type: ignore
+
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+except ImportError:
+    pass
+
 app = typer.Typer(
     add_completion=False,
     help="apgmx is a asyncpg migration utility based off of RDanny's migration system",

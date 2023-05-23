@@ -1,6 +1,6 @@
 # apgmx
 
-An asyncpg migration system based off of RoboDanny's migration system
+A database migrations tool for asyncpg (fork of RDanny's migrations system)
 
 ## Key Features
 
