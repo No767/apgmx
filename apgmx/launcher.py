@@ -4,7 +4,7 @@ import traceback
 import typer
 from typing_extensions import Annotated
 
-from .db_settings import database_uri
+from .config_loader import ConfigLoader
 from .migration import Migrations
 from .utils import ensure_uri_can_run, run_upgrade, run_upgrade_all
 
@@ -50,11 +50,12 @@ def init(
     ] = "Initial migration"
 ) -> None:
     """Initializes the database and creates the initial revision"""
+    confLoader = ConfigLoader()
 
-    asyncio.run(ensure_uri_can_run())
+    asyncio.run(ensure_uri_can_run(confLoader))
 
     migrations = Migrations()
-    migrations.database_uri = database_uri  # type: ignore
+    migrations.database_uri = confLoader.get_database_uri()
     revision = migrations.create_revision(reason)
     typer.echo(f"created revision V{revision.version!r}")
     typer.secho(f"hint: use the `upgrade` command to apply", fg="yellow")

@@ -18,7 +18,7 @@ async def run_upgrade_all(migrations: Migrations) -> int:
     return await migrations.upgrade_all(connection)
 
 
-async def ensure_uri_can_run() -> bool:
+async def ensure_uri_can_run(confLoader: ConfigLoader) -> bool:
     connection: asyncpg.Connection = await asyncpg.connect(confLoader.get_database_uri())  # type: ignore
     await connection.close()
     return True
