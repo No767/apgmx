@@ -24,7 +24,7 @@ class Revision:
         self.file: Path = file
 
     @classmethod
-    def from_match(cls, match: re.Match[str], file: Path):
+    def from_match(cls, match: re.Match, file: Path):
         return cls(
             kind=match.group("kind"),
             version=int(match.group("version")),
