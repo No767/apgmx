@@ -1,0 +1,53 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+      
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [3.8, 3.9, '3.10', '3.11']
+
+    steps:
+      - name: Checkout Repository  
+        uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.version }}
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.version }}
+
+      - name: Set up Poetry
+        uses: Gr1N/setup-poetry@v8
+
+      - name: Cache Poetry
+        id: cache-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-build-sdist-${{ matrix.version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install Poetry Dependencies
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: |
+          poetry install
+            
+      - name: Build Project
+        run: |
+            poetry build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+            path: dist/*
+
