@@ -36,7 +36,7 @@ class Migrations:
                 return json.load(fp)
         except FileNotFoundError:
             return {
-                "version": 0,
+                "version": 1,
                 "database_uri": "None",
             }
 
