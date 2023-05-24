@@ -20,6 +20,15 @@ pre-commit = "^3.3.2"
 pyright = "^1.1.309"
 ruff = "^0.0.269"
 
+
+[tool.poetry.group.tests.dependencies]
+pytest = "^7.3.1"
+pytest-asyncio = "^0.21.0"
+nox = "^2023.4.22"
+nox-poetry = "^1.0.2"
+pytest-dependency = "^0.5.1"
+pytest-cov = "^4.0.0"
+
 [tool.isort]
 profile = 'black'
 

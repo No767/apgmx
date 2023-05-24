@@ -59,11 +59,21 @@ class Migrations:
             "database_uri": self.database_uri,
         }
 
+    def load_from_env(self) -> bool:
+        dbEnv = os.getenv("DATABASE_URI")
+        if dbEnv is not None:
+            self.database_uri = dbEnv
+            return True
+        return False
+
     def load(self) -> None:
         self.ensure_path()
         data = self.load_metadata()
         self.version: int = data["version"]
-        self.database_uri: str = data["database_uri"]
+        loadFromEnv = self.load_from_env()
+
+        if loadFromEnv is False:
+            self.database_uri: str = data["database_uri"]
 
     def save(self):
         temp = f"{self.filename}.{uuid.uuid4()}.tmp"

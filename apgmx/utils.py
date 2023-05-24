@@ -8,13 +8,13 @@ confLoader: ConfigLoader = ConfigLoader()
 
 async def run_upgrade(migrations: Migrations) -> int:
     connection: asyncpg.Connection = await asyncpg.connect(
-        confLoader.get_database_uri()
+        migrations.database_uri  # type: ignore
     )
     return await migrations.upgrade(connection)
 
 
 async def run_upgrade_all(migrations: Migrations) -> int:
-    connection: asyncpg.Connection = await asyncpg.connect(confLoader.get_database_uri())  # type: ignore
+    connection: asyncpg.Connection = await asyncpg.connect(migrations.database_uri)  # type: ignore
     return await migrations.upgrade_all(connection)
 
 
